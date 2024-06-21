@@ -53,8 +53,16 @@ const getChannel = async (req, res) => {
 
 const deleteChannelById = async (req, res) => {
   try {
-      const channel = await Channel.findByIdAndDelete(req.params.id);
-      res.json({ message: ' deleted successfully', data: channel });
+      const channel = await Channel.deleteOne({_id:req.params.id});
+      fs.unlink(`public/uploads/${channel?.image}`, (err) => {
+        if (err) {
+          console.error('Error deleting image:', err);
+          return;
+        }
+        console.log('Image deleted successfully.');
+      });
+      res.status(200).json({ message: ' deleted successfully', data: channel });
+
   } catch (error) {
       res.status(400).json({ error: error.message });
   }

@@ -53,11 +53,19 @@ const getAds = async (req, res) => {
 
 const deleteAdsById = async (req, res) => {
   try {
-      const ads = await Ads.findByIdAndDelete(req.params.id);
-      res.json({ message: ' deleted successfully', data: ads });
-  } catch (error) {
-      res.status(400).json({ error: error.message });
-  }
+    const ads = await Ads.deleteOne({_id:req.params.id});
+    fs.unlink(`public/uploads/${ads?.image}`, (err) => {
+      if (err) {
+        console.error('Error deleting image:', err);
+        return;
+      }
+      console.log('Image deleted successfully.');
+    });
+    res.status(200).json({ message: ' deleted successfully', data: ads });
+
+} catch (error) {
+    res.status(400).json({ error: error.message });
+}
 };
 
 const getAdsById = async (req, res) => {

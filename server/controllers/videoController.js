@@ -53,11 +53,19 @@ const getVideos = async (req, res) => {
 
 const deleteVideoById = async (req, res) => {
   try {
-      const video = await Video.findByIdAndDelete(req.params.id);
-      res.json({ message: 'Video deleted successfully', data: video });
-  } catch (error) {
-      res.status(400).json({ error: error.message });
-  }
+    const video = await Video.deleteOne({_id:req.params.id});
+    fs.unlink(`public/uploads/${video?.image}`, (err) => {
+      if (err) {
+        console.error('Error deleting image:', err);
+        return;
+      }
+      console.log('Image deleted successfully.');
+    });
+    res.status(200).json({ message: ' deleted successfully', data: video });
+
+} catch (error) {
+    res.status(400).json({ error: error.message });
+}
 };
 
 const getVideoById = async (req, res) => {
