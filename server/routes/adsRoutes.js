@@ -12,7 +12,7 @@ const { upload } = require('../middlewares/multer');
 
 router.get('/',getAds)
 router.post('/',upload.single('ads'),createAds)
-router.put('/:id',updateAdsById)
+router.put('/:id',upload.single('ads'),updateAdsById)
 router.delete('/:id',deleteAdsById)
 router.get('/getads/:id',getAdsById)
 

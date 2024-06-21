@@ -14,9 +14,22 @@ const createVideo = async (req, res) => {
 };
 
 const updateVideoById = async (req, res) => {
+  const {title,subtitle,url,status } = req.body
+  const image = req.file?.filename;
   try {
-      const video = await Video.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      res.json({ message: 'Video updated successfully', data: video });
+      const video = await Video.findById(req.params.id);
+      if(!video){
+        return res.status(404).json({ message: ' not found' });
+      }
+      if(title) video.title = title
+      if(subtitle) video.subtitle = subtitle
+      if(url) video.url = url
+      if(status) video.status = status
+      if(image) video.image = image
+
+      await video.save()
+
+      res.json({ message: ' updated successfully', data: video });
   } catch (error) {
       res.status(400).json({ error: error.message });
   }

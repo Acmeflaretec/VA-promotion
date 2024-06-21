@@ -14,8 +14,21 @@ const createAds = async (req, res) => {
 };
 
 const updateAdsById = async (req, res) => {
+  const {title,subtitle,url,status } = req.body
+  const image = req.file?.filename;
   try {
-      const ads = await Ads.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const ads = await Ads.findById(req.params.id);
+      if(!ads){
+        return res.status(404).json({ message: ' not found' });
+      }
+      if(title) ads.title = title
+      if(subtitle) ads.subtitle = subtitle
+      if(url) ads.url = url
+      if(status) ads.status = status
+      if(image) ads.image = image
+
+      await ads.save()
+
       res.json({ message: ' updated successfully', data: ads });
   } catch (error) {
       res.status(400).json({ error: error.message });

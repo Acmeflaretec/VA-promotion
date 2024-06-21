@@ -14,8 +14,21 @@ const createChannel = async (req, res) => {
 };
 
 const updateChannelById = async (req, res) => {
+  const {title,subtitle,url,status } = req.body
+  const image = req.file?.filename;
   try {
-      const channel = await Channel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const channel = await Channel.findById(req.params.id);
+      if(!channel){
+        return res.status(404).json({ message: ' not found' });
+      }
+      if(title) channel.title = title
+      if(subtitle) channel.subtitle = subtitle
+      if(url) channel.url = url
+      if(status) channel.status = status
+      if(image) channel.image = image
+
+      await channel.save()
+
       res.json({ message: ' updated successfully', data: channel });
   } catch (error) {
       res.status(400).json({ error: error.message });

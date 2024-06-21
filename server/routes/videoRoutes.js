@@ -12,7 +12,7 @@ const { upload } = require('../middlewares/multer');
 
 router.get('/',getVideos)
 router.post('/',upload.single('video'),createVideo)
-router.put('/:id',updateVideoById)
+router.put('/:id',upload.single('video'),updateVideoById)
 router.delete('/:id',deleteVideoById)
 router.get('/getvideo/:id',getVideoById)
 
