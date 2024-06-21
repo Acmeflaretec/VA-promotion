@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "va-promotion-server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acmeflaretec/VA-promotion.git"
+  },
+  "author": "Shahil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Acmeflaretec/VA-promotion/issues"
+  },
+  "homepage": "https://github.com/Acmeflaretec/VA-promotion#readme"
+}
