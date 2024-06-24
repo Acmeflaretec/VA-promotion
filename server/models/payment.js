@@ -29,8 +29,8 @@ const paymetSchema = mongoose.Schema({
         required: true
     },
     status: {
-        type: Boolean,
-        default: true
+        type: Boolean,   
+        default: false
     },
     isActive:{
         type: Boolean,

@@ -19,13 +19,36 @@ const createPayment = async (req, res) => {
 
 const updatePaymentById = async (req, res) => {
   try {
-    // const {_id}=req.body
     const { _id, status } = req.body;
-    console.log("1-",status);
 
     const user = await Payment.findById(_id);
+    if(status === 'true') {
+      user.status = 'false'
+    }else{
+      user.status = 'true'
+    }
+    await user.save()
+    res.json({ message: ' updated successfully', data: user });
+  } catch (error) { 
+      res.status(400).json({ error: error.message });
+  }
+};
+const updateVideo = async (req, res) => {
+  try {
+    const { _id, status ,isActive} = req.body;
+    // console.log(_id, status ,isActive);
+
+    const user = await Payment.findById(_id);
+    if(!user){
+      return res.status(404).json({ message: ' not found' });
+    }
     if(status) user.status = status
-    console.log("ss",user);
+    if(isActive) user.isActive = isActive
+    // if(url) user.url = url
+    // if(description) user.description = description
+    // if(status) user.status = status
+    // if(image) user.image = image
+    
     await user.save()
     res.json({ message: ' updated successfully', data: user });
   } catch (error) { 
@@ -54,6 +77,21 @@ const getChannel = async (req, res) => {
 
   try {
       const payment = await Payment.find({type: 'channel'})
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .exec();
+
+      res.json({ data: payment });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};
+const getVideo = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  try {
+      const payment = await Payment.find({type: 'video'})
           .skip((page - 1) * limit)
           .limit(limit)
           .exec();
@@ -93,6 +131,8 @@ module.exports ={
   getPayment,
   deletePaymentById,
   getPaymentById,
-  getChannel
+  getChannel,
+  getVideo,
+  updateVideo
   
 }
