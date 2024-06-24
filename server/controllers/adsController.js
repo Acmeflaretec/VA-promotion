@@ -1,29 +1,35 @@
 const Ads = require('../models/ads')
 
 const createAds = async (req, res) => {
-  const { title,subtitle,url } = req.body
-  const image = req?.file?.filename
+  const { title, subtitle, url, description } = req.body;
+  const image = req?.file?.filename;
 
   try {
-      const ads = new Ads({title,subtitle,url,image});
-      await ads.save();
-      res.status(201).json({ message: ' created successfully', data: ads });
+    const ads = new Ads({ title, subtitle, url, description, image });
+    console.log("Created Ads:", ads);
+
+    await ads.save();
+    res.status(201).json({ message: 'Created successfully', data: ads });
   } catch (error) {
-      res.status(400).json({ error: error.message });
+    // console.log("Created Ads:",  error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
+
 const updateAdsById = async (req, res) => {
-  const {title,subtitle,url,status } = req.body
+  
+  const {title,subtitle,url,description,status,_id } = req.body
   const image = req.file?.filename;
   try {
-      const ads = await Ads.findById(req.params.id);
+      const ads = await Ads.findById(_id);   
       if(!ads){
         return res.status(404).json({ message: ' not found' });
       }
       if(title) ads.title = title
       if(subtitle) ads.subtitle = subtitle
       if(url) ads.url = url
+      if(description) ads.description = description
       if(status) ads.status = status
       if(image) ads.image = image
 
@@ -53,15 +59,16 @@ const getAds = async (req, res) => {
 
 const deleteAdsById = async (req, res) => {
   try {
+    const {image}=req.body
     const ads = await Ads.deleteOne({_id:req.params.id});
-    fs.unlink(`public/uploads/${ads?.image}`, (err) => {
-      if (err) {
-        console.error('Error deleting image:', err);
-        return;
-      }
-      console.log('Image deleted successfully.');
-    });
-    res.status(200).json({ message: ' deleted successfully', data: ads });
+    // fs.unlink(`middlewares/public/uploads/${image}`, (err) => {
+    //   if (err) {
+    //     console.error('Error deleting image:', err);
+    //     return;
+    //   }
+    //   console.log('Image deleted successfully.');
+    // });
+    return res.status(200).json({ message: ' deleted successfully', data: ads });
 
 } catch (error) {
     res.status(400).json({ error: error.message });
@@ -75,7 +82,7 @@ const getAdsById = async (req, res) => {
       if (!ads) {
           return res.status(404).json({ message: ' not found' });
       }
-      
+         
       res.json({ data: ads });
   } catch (error) {
       res.status(400).json({ error: error.message });

@@ -8,12 +8,12 @@ const paymetSchema = mongoose.Schema({
     email: {
         type: String,
         required: true
-    }, 
-     phone: {
-      type: String,
-      required: true
-  },
-    videoilink: {
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    url: {
         type: String,
     },
     paymentimage: {
@@ -21,17 +21,25 @@ const paymetSchema = mongoose.Schema({
         required: true
     },
     location: {
-      type: String,
-     
-  },
+        type: String,
+
+    },
+    type:{
+        type: String,
+        required: true
+    },
     status: {
         type: Boolean,
         default: true
-    }
+    },
+    isActive:{
+        type: Boolean,
+        default: false
+    },
 },
-{
-    timestamps:true
-})
+    {
+        timestamps: true
+    })
 
 module.exports = mongoose.model('Payment', paymetSchema)
 

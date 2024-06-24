@@ -6,7 +6,7 @@ const adsRoutes = require('../routes/adsRoutes')
 const paymentRoutes = require('../routes/paymentRoutes')
 
 
-
+   
 
 router.use('/v1/video',videoRoutes );
 router.use('/v1/channel',channelRoutes );

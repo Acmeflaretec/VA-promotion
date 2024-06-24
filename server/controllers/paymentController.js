@@ -2,12 +2,15 @@ const Payment = require('../models/payment')
 
 
 const createPayment = async (req, res) => {
-  const { title,subtitle,url } = req.body
+  // console.log('sam');
+  const { name,email,phone,url,location,type } = req.body
+  // console.log('sam1',name,email,phone,url,location,type );
   const image = req?.file?.filename
-
+  // const image = '1719068485285-2023-05-28 - Copy.png'
+  
   try {
-      const payment = new Payment({title,subtitle,url,paymentimage:image});
-      await channel.save();
+      const payment = new Payment({ name,email,phone,url,location,type,paymentimage:image});
+      await payment.save();
       res.status(201).json({ message: ' created successfully', data: payment });
   } catch (error) {
       res.status(400).json({ error: error.message });
@@ -16,9 +19,16 @@ const createPayment = async (req, res) => {
 
 const updatePaymentById = async (req, res) => {
   try {
-      const payment = await Payment.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      res.json({ message: ' updated successfully', data: payment });
-  } catch (error) {
+    // const {_id}=req.body
+    const { _id, status } = req.body;
+    console.log("1-",status);
+
+    const user = await Payment.findById(_id);
+    if(status) user.status = status
+    console.log("ss",user);
+    await user.save()
+    res.json({ message: ' updated successfully', data: user });
+  } catch (error) { 
       res.status(400).json({ error: error.message });
   }
 };
@@ -29,6 +39,21 @@ const getPayment = async (req, res) => {
 
   try {
       const payment = await Payment.find()
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .exec();
+
+      res.json({ data: payment });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};
+const getChannel = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  try {
+      const payment = await Payment.find({type: 'channel'})
           .skip((page - 1) * limit)
           .limit(limit)
           .exec();
@@ -68,5 +93,6 @@ module.exports ={
   getPayment,
   deletePaymentById,
   getPaymentById,
+  getChannel
   
 }
