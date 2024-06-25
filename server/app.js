@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 const corsOptions = {
   origin: 'http://localhost:3000', // This is the origin of the request (your React frontend URL)
   credentials: true, // Indicates whether or not the response to the request can be exposed when the credentials flag is true
-};
+};   
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -23,9 +23,9 @@ morgan.token("custom-date", (req, res) => {
 app.use(
   morgan(
     ":custom-date :method :url :status :res[content-length] - :response-time ms"
-  )
+  )        
 );
-console.log(morgan);
+// console.log(morgan);
 app.use('/api',router);
 
-module.exports = app;
+module.exports = app;   
